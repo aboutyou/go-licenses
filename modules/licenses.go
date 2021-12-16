@@ -16,8 +16,24 @@ var (
 	licenseRegexp = regexp.MustCompile(`^(?i)(LICENSE|LICENCE|COPYING|README|NOTICE).*$`)
 )
 
-func findLicenseFile(folder string) ([]byte, error) {
-	dir, err := os.ReadDir(folder)
+func findLicenseFile(dep *modfile.Require) ([]byte, error) {
+	fsPath, err := module.EscapePath(dep.Mod.Path)
+	if err != nil {
+		return nil, err
+	}
+
+	version, err := module.EscapeVersion(dep.Mod.Version)
+	if err != nil {
+		return nil, err
+	}
+
+	modFolder := path.Join(
+		build.Default.GOPATH,
+		"pkg/mod",
+		fmt.Sprintf("%s@%s", fsPath, version),
+	)
+
+	dir, err := os.ReadDir(modFolder)
 	if err != nil {
 		return nil, err
 	}
@@ -28,7 +44,7 @@ func findLicenseFile(folder string) ([]byte, error) {
 		}
 
 		if licenseRegexp.MatchString(file.Name()) {
-			return os.ReadFile(path.Join(folder, file.Name()))
+			return os.ReadFile(path.Join(modFolder, file.Name()))
 		}
 	}
 
@@ -39,27 +55,7 @@ func getLicenseType(
 	classifier *licenseclassifier.License,
 	dep *modfile.Require,
 ) string {
-	fsPath, err := module.EscapePath(dep.Mod.Path)
-	if err != nil {
-		return "unknown"
-	}
-
-	version, err := module.EscapeVersion(dep.Mod.Version)
-	if err != nil {
-		return "unknown"
-	}
-
-	modFolder := path.Join(
-		build.Default.GOPATH,
-		"pkg/mod",
-		fmt.Sprintf(
-			"%s@%s",
-			fsPath,
-			version,
-		),
-	)
-
-	licenseFile, err := findLicenseFile(modFolder)
+	licenseFile, err := findLicenseFile(dep)
 	if err != nil {
 		return "unknown"
 	}
