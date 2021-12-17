@@ -27,6 +27,8 @@ type LoadModuleOptions struct {
 	IncludeIndirectModules bool
 }
 
+// TODO(HenriBeck): Add support to pass a path to a go.mod
+// TODO(HenriBeck): Add support to configure the license classifier treshold
 func LoadModules(options LoadModuleOptions) ([]Module, error) {
 	content, err := os.ReadFile("./go.mod")
 	if err != nil {

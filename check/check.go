@@ -15,7 +15,7 @@ var Command = &cobra.Command{
 	RunE:  runCommand,
 }
 
-// TODO(HenriBeck): Add support for more licenses
+// TODO(HenriBeck): Make licenses configurable
 var allowedLicenses = []string{
 	licenseclassifier.Apache20,
 	licenseclassifier.BSD2Clause,
@@ -56,7 +56,6 @@ func CheckLicenses(mods []modules.Module) []modules.Module {
 	forbiddenMods := make([]modules.Module, 0, len(mods))
 
 	for _, mod := range mods {
-
 		isAllowed := false
 		for _, allowedLicense := range allowedLicenses {
 			if mod.License == allowedLicense {
