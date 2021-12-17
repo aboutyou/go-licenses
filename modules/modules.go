@@ -53,7 +53,7 @@ func LoadModules(options LoadModuleOptions) ([]Module, error) {
 		modules = append(modules, Module{
 			Path:    dep.Mod.Path,
 			Version: dep.Mod.Version,
-			License: getLicenseType(classifier, dep),
+			License: resolveLicenseType(classifier, dep),
 		})
 	}
 

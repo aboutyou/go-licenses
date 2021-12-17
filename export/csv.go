@@ -35,7 +35,7 @@ func (writer *CSVWriter) WriteModules(mods []modules.Module) error {
 			mod.Path,
 			mod.Version,
 			mod.License,
-			mod.GetPackageURL().String(),
+			mod.PackageURL().String(),
 		})
 
 		if err != nil {
