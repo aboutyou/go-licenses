@@ -24,7 +24,7 @@ func (writer *JSONWriter) WriteModules(mods []modules.Module) error {
 			"path":    mod.Path,
 			"version": mod.Path,
 			"license": mod.License,
-			"url":     mod.GetPackageURL().String(),
+			"url":     mod.PackageURL().String(),
 		})
 	}
 

@@ -15,7 +15,7 @@ type Module struct {
 	License string
 }
 
-func (module *Module) GetPackageURL() *url.URL {
+func (module *Module) PackageURL() *url.URL {
 	return &url.URL{
 		Scheme: "https",
 		Host:   "pkg.go.dev",
@@ -53,7 +53,7 @@ func LoadModules(options LoadModuleOptions) ([]Module, error) {
 		modules = append(modules, Module{
 			Path:    dep.Mod.Path,
 			Version: dep.Mod.Version,
-			License: getLicenseType(classifier, dep),
+			License: resolveLicenseType(classifier, dep),
 		})
 	}
 

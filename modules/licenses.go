@@ -13,18 +13,18 @@ import (
 )
 
 var (
-	licenseRegexp = regexp.MustCompile(`^(?i)(LICENSE|LICENCE|COPYING|README|NOTICE).*$`)
+	licenseRegexp = regexp.MustCompile(`^(?i)(LICENSE|LICENCE|COPYING|README|NOTICE)`)
 )
 
 func findLicenseFile(dep *modfile.Require) ([]byte, error) {
 	fsPath, err := module.EscapePath(dep.Mod.Path)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("escaping the module path failed: %w", err)
 	}
 
 	version, err := module.EscapeVersion(dep.Mod.Version)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("escaping the module version failed: %w", err)
 	}
 
 	modFolder := path.Join(
@@ -35,7 +35,7 @@ func findLicenseFile(dep *modfile.Require) ([]byte, error) {
 
 	dir, err := os.ReadDir(modFolder)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("reading the modules directory failed: %w", err)
 	}
 
 	for _, file := range dir {
@@ -43,15 +43,23 @@ func findLicenseFile(dep *modfile.Require) ([]byte, error) {
 			continue
 		}
 
-		if licenseRegexp.MatchString(file.Name()) {
-			return os.ReadFile(path.Join(modFolder, file.Name()))
+		if !licenseRegexp.MatchString(file.Name()) {
+			continue
 		}
+
+		license, err := os.ReadFile(path.Join(modFolder, file.Name()))
+		if err != nil {
+			return nil, fmt.Errorf("reading the license file failed: %w", err)
+		}
+
+		return license, nil
+
 	}
 
-	return nil, fmt.Errorf("no license found")
+	return nil, fmt.Errorf("no license found for module %s", dep.Mod.String())
 }
 
-func getLicenseType(
+func resolveLicenseType(
 	classifier *licenseclassifier.License,
 	dep *modfile.Require,
 ) string {
