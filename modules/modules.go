@@ -15,7 +15,7 @@ type Module struct {
 	License string
 }
 
-func (module *Module) GetPackageURL() *url.URL {
+func (module *Module) PackageURL() *url.URL {
 	return &url.URL{
 		Scheme: "https",
 		Host:   "pkg.go.dev",
