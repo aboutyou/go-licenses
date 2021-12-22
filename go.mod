@@ -1,6 +1,6 @@
 module github.com/aboutyou/go-licenses
 
-go 1.16
+go 1.17
 
 require (
 	github.com/google/licenseclassifier v0.0.0-20210722185704-3043a050f148
