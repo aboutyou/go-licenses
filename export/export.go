@@ -9,10 +9,11 @@ import (
 )
 
 var Command = &cobra.Command{
-	Use:   "export",
-	Short: "Prints all licenses that apply to a Go package and its dependencies",
-	Args:  cobra.ExactArgs(1),
-	RunE:  runCommand,
+	Use:     "export {csv | json}",
+	Short:   "Prints all modules and their licenses in either CSV or JSON format for license compliance usecases.",
+	Example: "go-licenses export csv > licenses.csv",
+	Args:    cobra.ExactArgs(1),
+	RunE:    runCommand,
 }
 
 func runCommand(_ *cobra.Command, args []string) error {

@@ -11,7 +11,8 @@ import (
 
 var (
 	rootCmd = &cobra.Command{
-		Use: "licenses",
+		Use:   "go-licenses",
+		Short: "go-licenses is a license compliance tool for Go Modules",
 	}
 )
 

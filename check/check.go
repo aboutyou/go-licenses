@@ -10,9 +10,10 @@ import (
 )
 
 var Command = &cobra.Command{
-	Use:   "check",
-	Short: "Prints all licenses that apply to a Go package and its dependencies",
-	RunE:  runCommand,
+	Use:     "check",
+	Short:   "Validates that all the modules in your go.mod have allowed licenses.",
+	Example: "go-licenses check",
+	RunE:    runCommand,
 }
 
 // TODO(HenriBeck): Make licenses configurable
