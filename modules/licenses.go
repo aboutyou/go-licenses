@@ -27,9 +27,12 @@ func findLicenseFile(dep *modfile.Require) ([]byte, error) {
 		return nil, fmt.Errorf("escaping the module version failed: %w", err)
 	}
 
+	modBasePath := path.Join(build.Default.GOPATH, "pkg/mod")
+	if val, ok := os.LookupEnv("GOMODCACHE"); ok {
+		modBasePath = val
+	}
 	modFolder := path.Join(
-		build.Default.GOPATH,
-		"pkg/mod",
+		modBasePath,
 		fmt.Sprintf("%s@%s", fsPath, version),
 	)
 
