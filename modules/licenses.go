@@ -29,7 +29,7 @@ func findLicenseFile(dep *modfile.Require) ([]byte, error) {
 
 	modBasePath := path.Join(build.Default.GOPATH, "pkg/mod")
 	if val, ok := os.LookupEnv("GOMODCACHE"); ok {
-		modBasePath = os.Getenv("GOMODCACHE")
+		modBasePath = val
 	}
 	modFolder := path.Join(
 		modBasePath,
